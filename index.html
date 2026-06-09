@@ -464,7 +464,7 @@ const assessmentData = {
   ]
 };
 
-const state = {maharah:null, approach:null, method:null, assessment:null};
+const state = {maharah:null, approach:null, method:null, assessments:[]};
 const el = {
   maharahChips:document.getElementById('maharahChips'),
   pendekatanSection:document.getElementById('section-pendekatan'),
@@ -490,7 +490,7 @@ function renderMaharah(){
   ).join('');
 }
 function selectMaharah(key){
-  state.maharah = key; state.approach = null; state.method = null; state.assessment = null; state.assessment = null;
+  state.maharah = key; state.approach = null; state.method = null; state.assessments = [];
   setSelected(el.maharahChips,key);
   renderApproaches();
   el.pendekatanSection.classList.remove('hidden');
@@ -511,7 +511,7 @@ function renderApproaches(){
   ).join('');
 }
 function selectApproach(name){
-  state.approach = name; state.method = null; state.assessment = null;
+  state.approach = name; state.method = null; state.assessments = [];
   setSelected(el.pendekatanChips,name);
   const a = approachData[name];
   const methods = a.methods[state.maharah] || [];
@@ -529,7 +529,7 @@ function selectApproach(name){
 }
 function selectMethod(name){
   state.method = name;
-  state.assessment = null;
+  state.assessments = [];
   setSelected(el.metodeChips,name);
   renderAssessments();
   updatePath();
@@ -538,7 +538,7 @@ function selectMethod(name){
 function renderAssessments(){
   const m = maharahData[state.maharah];
   const list = assessmentData[state.maharah] || [];
-  el.asesmenSub.textContent = `Asesmen yang cocok untuk ${m.label}. Pilih salah satu bentuk evaluasi untuk ringkasan RPP lite.`;
+  el.asesmenSub.textContent = `Asesmen yang cocok untuk ${m.label}. Pilih satu atau beberapa bentuk evaluasi untuk ringkasan RPP lite.`;
   el.asesmenCards.innerHTML = list.map(([title,desc]) => `
     <article class="assess-card" data-key="${esc(title)}" onclick="selectAssessment('${escJs(title)}')">
       <h3>${esc(title)}</h3>
@@ -548,45 +548,59 @@ function renderAssessments(){
   el.asesmenSection.classList.remove('hidden');
   el.asesmenSection.classList.add('fade');
   el.ringkasan.classList.add('hidden');
-  el.descBox.textContent = `${m.label} → ${state.approach} → ${state.method}. Pilih asesmen yang sesuai dengan indikator pembelajaran.`;
+  el.descBox.textContent = `${m.label} → ${state.approach} → ${state.method}. Pilih satu atau beberapa asesmen yang sesuai dengan indikator pembelajaran.`;
 }
-function setSelectedAssessment(title){
-  [...el.asesmenCards.querySelectorAll('.assess-card')].forEach(card=>card.classList.toggle('selected',card.dataset.key===title));
+function setSelectedAssessment(){
+  [...el.asesmenCards.querySelectorAll('.assess-card')].forEach(card=>{
+    card.classList.toggle('selected', state.assessments.includes(card.dataset.key));
+  });
 }
 function selectAssessment(title){
-  state.assessment = title;
-  setSelectedAssessment(title);
-  renderResult();
+  if(state.assessments.includes(title)){
+    state.assessments = state.assessments.filter(item => item !== title);
+  }else{
+    state.assessments.push(title);
+  }
+  setSelectedAssessment();
+  if(state.assessments.length){
+    renderResult();
+  }else{
+    el.ringkasan.classList.add('hidden');
+    el.descBox.textContent = `${maharahData[state.maharah].label} → ${state.approach} → ${state.method}. Pilih satu atau beberapa asesmen yang sesuai dengan indikator pembelajaran.`;
+  }
   updatePath();
-  el.ringkasan.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function renderResult(){
   const m = maharahData[state.maharah];
   const a = approachData[state.approach];
   const method = methodData[state.method];
-  const assessment = (assessmentData[state.maharah] || []).find(([title]) => title === state.assessment) || [state.assessment, ""];
+  const selectedAssessments = state.assessments.map(title => (assessmentData[state.maharah] || []).find(([itemTitle]) => itemTitle === title) || [title, ""]);
+  const assessmentCards = selectedAssessments.map(([title, desc]) => `
+    <article class="card"><h3>${esc(title)}</h3><p>${esc(desc)}</p><div class="badge-row"><span class="badge green">Asesmen</span></div></article>
+  `).join('');
+  const assessmentNames = state.assessments.join(', ');
   el.resultCards.innerHTML = `
     <article class="card"><h3>${esc(m.icon)} ${esc(m.label)}</h3><p>${esc(m.desc)}</p><div class="badge-row"><span class="badge green">Maharah</span></div></article>
     <article class="card"><h3>${esc(state.approach)}</h3><p>${esc(a.desc)}</p><div class="badge-row"><span class="badge gold">Pendekatan</span></div></article>
     <article class="card"><h3>${esc(state.method)}</h3><p>${esc(method.desc)}</p><div class="badge-row"><span class="badge rose">Metode</span></div></article>
-    <article class="card"><h3>${esc(assessment[0])}</h3><p>${esc(assessment[1])}</p><div class="badge-row"><span class="badge green">Asesmen</span></div></article>
+    ${assessmentCards}
     <article class="card"><h3>Catatan Integrasi Unsur Bahasa</h3><p>${esc(m.unsur)}</p><div class="badge-row"><span class="badge">Aṣwāt</span><span class="badge">Mufradāt</span><span class="badge">Qawā‘id</span></div></article>
-    <article class="card"><h3>Rumusan Jalur</h3><p>${esc(m.label)} → ${esc(state.approach)} → ${esc(state.method)} → ${esc(state.assessment)}</p><div class="badge-row"><span class="badge green">Siap dipakai</span></div></article>
+    <article class="card"><h3>Rumusan Jalur</h3><p>${esc(m.label)} → ${esc(state.approach)} → ${esc(state.method)} → ${esc(assessmentNames)}</p><div class="badge-row"><span class="badge green">Siap dipakai</span></div></article>
   `;
   el.ringkasan.classList.remove('hidden');
   el.ringkasan.classList.add('fade');
-  el.descBox.textContent = `${m.label} → ${state.approach} → ${state.method} → ${state.assessment}. ${method.fit}`;
+  el.descBox.textContent = `${m.label} → ${state.approach} → ${state.method} → ${assessmentNames}. ${method.fit}`;
 }
 function updatePath(){
   const rows = [];
   if(state.maharah) rows.push(['Maharah', maharahData[state.maharah].label]);
   if(state.approach) rows.push(['Pendekatan', state.approach]);
   if(state.method) rows.push(['Metode', state.method]);
-  if(state.assessment) rows.push(['Asesmen', state.assessment]);
+  if(state.assessments.length) rows.push(['Asesmen', state.assessments.join(', ')]);
   el.pathBox.innerHTML = rows.length ? rows.map(([k,v]) => `<div class="path-item"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join('') : '<p class="hint">Belum ada pilihan.</p>';
 }
 function resetMetode(){
-  state.method = null; state.assessment = null;
+  state.method = null; state.assessments = [];
   setSelected(el.metodeChips,null);
   el.asesmenSection.classList.add('hidden');
   el.ringkasan.classList.add('hidden');
@@ -594,7 +608,7 @@ function resetMetode(){
   updatePath();
 }
 function resetPendekatan(){
-  state.approach = null; state.method = null; state.assessment = null;
+  state.approach = null; state.method = null; state.assessments = [];
   setSelected(el.pendekatanChips,null);
   el.metodeSection.classList.add('hidden');
   el.asesmenSection.classList.add('hidden');
@@ -605,14 +619,14 @@ function resetPendekatan(){
   updatePath();
 }
 function resetAsesmen(){
-  state.assessment = null;
-  setSelectedAssessment(null);
+  state.assessments = [];
+  setSelectedAssessment();
   el.ringkasan.classList.add('hidden');
-  el.descBox.textContent = state.method ? `${maharahData[state.maharah].label} → ${state.approach} → ${state.method}. Pilih asesmen yang sesuai dengan indikator pembelajaran.` : 'Pilih metode terlebih dahulu.';
+  el.descBox.textContent = state.method ? `${maharahData[state.maharah].label} → ${state.approach} → ${state.method}. Pilih satu atau beberapa asesmen yang sesuai dengan indikator pembelajaran.` : 'Pilih metode terlebih dahulu.';
   updatePath();
 }
 function resetAll(){
-  state.maharah = null; state.approach = null; state.method = null; state.assessment = null; state.assessment = null;
+  state.maharah = null; state.approach = null; state.method = null; state.assessments = []; state.assessment = null;
   setSelected(el.maharahChips,null);
   el.pendekatanSection.classList.add('hidden');
   el.metodeSection.classList.add('hidden');
