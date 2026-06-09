@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Peta Lite Maharah, Pendekatan, Metode, dan Asesmen Pembelajaran Bahasa Arab</title>
+<style>
+  :root{
+    --bg:#f7f3ea;
+    --paper:#fffdf8;
+    --paper2:#f1eadf;
+    --ink:#1f2933;
+    --muted:#66717c;
+    --line:#ded4c4;
+    --soft:#eee3d5;
+    --accent:#6b4f3b;
+    --green:#315f4d;
+    --green-soft:#e4efe9;
+    --gold:#806018;
+    --gold-soft:#f6efd7;
+    --rose:#8b3a3a;
+    --rose-soft:#f7e6e6;
+    --blue:#334f73;
+    --blue-soft:#e7edf6;
+    --radius:18px;
+    --shadow:0 14px 34px rgba(64,42,22,.08);
+    --shadow2:0 6px 18px rgba(64,42,22,.05);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at top left, rgba(107,79,59,.10), transparent 32rem),
+      radial-gradient(circle at top right, rgba(49,95,77,.08), transparent 28rem),
+      repeating-linear-gradient(to bottom, transparent 0, transparent 31px, rgba(107,79,59,.03) 32px),
+      var(--bg);
+  }
+  .wrap{max-width:1160px;margin:0 auto;padding:24px 16px 34px}
+  .hero{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:24px;
+    padding:28px;
+    box-shadow:var(--shadow);
+    margin-bottom:16px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero:after{
+    content:"";
+    position:absolute;
+    inset:auto -80px -90px auto;
+    width:230px;
+    height:230px;
+    border-radius:50%;
+    background:rgba(49,95,77,.08);
+  }
+  .hero-content{position:relative;z-index:1}
+  .eyebrow{
+    display:inline-flex;
+    padding:7px 11px;
+    border-radius:999px;
+    background:var(--soft);
+    color:var(--accent);
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+  h1{
+    margin:14px 0 10px;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:clamp(28px,4vw,44px);
+    line-height:1.08;
+    letter-spacing:-.03em;
+    max-width:18ch;
+  }
+  .hero p{margin:0;max-width:78ch;color:var(--muted);line-height:1.8;font-size:15px}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  .btn{
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--ink);
+    border-radius:999px;
+    padding:10px 14px;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:800;
+    transition:.16s ease;
+  }
+  .btn:hover{transform:translateY(-1px);border-color:var(--accent)}
+  .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+  .panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow2);overflow:hidden}
+  .main{padding:16px}.side{padding:16px;position:sticky;top:14px}
+  .section{border:1px solid #e7ddcf;border-radius:16px;background:#fffefb;padding:16px;margin-bottom:12px}
+  .section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
+  .title{display:flex;align-items:center;gap:10px;font-weight:900;font-size:15px}
+  .num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--soft);color:var(--accent);border:1px solid var(--line);font-size:12px;font-weight:900}
+  .sub{font-size:13px;line-height:1.7;color:var(--muted);margin-bottom:12px}
+  .chips{display:flex;flex-wrap:wrap;gap:9px}
+  button{font:inherit}
+  .chip{
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--ink);
+    border-radius:999px;
+    padding:10px 13px;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:800;
+    line-height:1.25;
+    transition:.17s ease;
+  }
+  .chip:hover{transform:translateY(-1px);border-color:var(--accent);background:#fffaf2}
+  .chip.selected{background:var(--accent);border-color:var(--accent);color:#fff}
+  .chip .small{opacity:.8;font-weight:700}
+  .reset{border:1px solid var(--line);background:#fff;border-radius:999px;color:var(--muted);font-size:12px;font-weight:800;padding:8px 11px;cursor:pointer}
+  .hidden{display:none!important}
+  .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card{border:1px solid #e7ddcf;border-radius:15px;background:#fff;padding:14px}
+  .card h3{margin:0 0 7px;font-size:15px;letter-spacing:-.01em}
+  .card p{margin:0;color:var(--muted);font-size:13px;line-height:1.75}
+  .badge-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .badge{font-size:11px;font-weight:900;border-radius:999px;padding:4px 9px;border:1px solid var(--line);background:var(--paper2);color:var(--accent)}
+  .badge.green{background:var(--green-soft);color:var(--green)}
+  .badge.gold{background:var(--gold-soft);color:var(--gold)}
+  .badge.rose{background:var(--rose-soft);color:var(--rose)}
+  .box{border:1px solid #e7ddcf;border-radius:15px;background:#fffefb;padding:14px;margin-bottom:12px}
+  .box h2{font-size:15px;margin:0 0 10px;letter-spacing:-.01em}
+  .box p{font-size:13px;color:var(--muted);line-height:1.75;margin:0}
+  .path{display:grid;gap:8px}
+  .path-item{display:flex;gap:10px;border-bottom:1px dashed #e7ddcf;padding:8px 0}
+  .path-item:last-child{border-bottom:0}
+  .path-item .k{width:94px;flex:0 0 auto;font-size:11px;font-weight:900;color:var(--muted);letter-spacing:.11em;text-transform:uppercase}
+  .path-item .v{font-size:13px;font-weight:800;line-height:1.6}
+  .hint{font-size:13px;color:var(--muted);line-height:1.75}
+  .hint strong{color:var(--ink)}
+  .footer-note{font-size:12px;color:var(--muted);line-height:1.7;margin-top:10px}
+  .fade{animation:fade .2s ease both}
+
+  .assessment-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .assess-card{border:1px solid #e7ddcf;border-radius:15px;background:#fff;padding:13px;cursor:pointer;transition:.17s ease}
+  .assess-card:hover{transform:translateY(-1px);border-color:var(--accent);background:#fffaf2}
+  .assess-card.selected{border-color:var(--accent);box-shadow:0 0 0 2px rgba(107,79,59,.12);background:#fff9ef}
+  .assess-card h3{margin:0 0 6px;font-size:14px;letter-spacing:-.01em}
+  .assess-card p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.65}
+  @media(max-width:720px){.assessment-grid{grid-template-columns:1fr}}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+  @media(max-width:940px){.grid{grid-template-columns:1fr}.side{position:static}.cards{grid-template-columns:1fr}}
+  @media(max-width:620px){.wrap{padding:14px 10px}.hero{padding:20px;border-radius:18px}.section,.panel,.box{border-radius:14px}.path-item{display:block}.path-item .k{width:auto;margin-bottom:3px}h1{max-width:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-content">
+      <span class="eyebrow">Versi Lite</span>
+      <h1>Peta Pembelajaran Bahasa Arab Berbasis Maharah</h1>
+      <p>
+        Pilih maharah terlebih dahulu, lalu pilih pendekatan dan metode yang sesuai.
+        Versi ini memuat empat komponen: maharah, pendekatan, metode, dan asesmen.
+      </p>
+      <div class="hero-actions">
+        <button class="btn primary" onclick="document.getElementById('section-maharah').scrollIntoView({behavior:'smooth'})">Mulai memilih</button>
+        <button class="btn" onclick="resetAll()">Reset semua</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="grid">
+    <main class="panel main">
+      <section class="section" id="section-maharah">
+        <div class="section-head">
+          <div class="title"><span class="num">1</span> Pilih Maharah</div>
+          <button class="reset" onclick="resetAll()">Reset</button>
+        </div>
+        <div class="sub">Maharah menjadi titik awal. Aṣwāt, mufradāt, dan qawā‘id masuk sebagai unsur pendukung di dalam maharah, bukan sebagai jalur terpisah.</div>
+        <div class="chips" id="maharahChips"></div>
+      </section>
+
+      <section class="section hidden" id="section-pendekatan">
+        <div class="section-head">
+          <div class="title"><span class="num">2</span> Pilih Pendekatan</div>
+          <button class="reset" onclick="resetPendekatan()">Hapus pendekatan</button>
+        </div>
+        <div class="sub" id="pendekatanSub">Pendekatan muncul setelah maharah dipilih.</div>
+        <div class="chips" id="pendekatanChips"></div>
+      </section>
+
+      <section class="section hidden" id="section-metode">
+        <div class="section-head">
+          <div class="title"><span class="num">3</span> Pilih Metode</div>
+          <button class="reset" onclick="resetMetode()">Hapus metode</button>
+        </div>
+        <div class="sub" id="metodeSub">Metode muncul setelah pendekatan dipilih.</div>
+        <div class="chips" id="metodeChips"></div>
+      </section>
+
+      <section class="section hidden" id="section-asesmen">
+        <div class="section-head">
+          <div class="title"><span class="num">4</span> Pilih Asesmen</div>
+          <button class="reset" onclick="resetAsesmen()">Hapus asesmen</button>
+        </div>
+        <div class="sub" id="asesmenSub">Asesmen muncul setelah metode dipilih dan mengikuti maharah yang dipilih.</div>
+        <div class="assessment-grid" id="asesmenCards"></div>
+      </section>
+
+      <section class="section hidden" id="section-ringkasan">
+        <div class="section-head">
+          <div class="title"><span class="num">✓</span> Ringkasan Pilihan</div>
+        </div>
+        <div class="cards" id="resultCards"></div>
+      </section>
+    </main>
+
+    <aside class="panel side">
+      <div class="box">
+        <h2>Jalur aktif</h2>
+        <div class="path" id="pathBox"><p class="hint">Belum ada pilihan.</p></div>
+      </div>
+
+      <div class="box">
+        <h2>Keterangan aktif</h2>
+        <p id="descBox">Pilih maharah untuk memulai pemetaan.</p>
+      </div>
+
+      <div class="box">
+        <h2>Daftar pendekatan</h2>
+        <p>Kontekstual, Quantum, Kooperatif, PAIKEM, PBL, PjBL, CALL, Saintifik, dan Deep Learning.</p>
+      </div>
+
+      <div class="box">
+        <h2>Daftar metode</h2>
+        <p>Gramatika-Terjemah, Langsung, Membaca, Audiolingual, Komunikatif, dan Eklektik.</p>
+      </div>
+
+      <div class="box">
+        <h2>Asesmen</h2>
+        <p>Pilihan asesmen mengikuti maharah: istimā‘, kalām, qirā’ah, atau kitābah.</p>
+      </div>
+
+      <div class="footer-note">
+        Catatan: dalam versi lengkap, PBL dan PjBL dapat ditempatkan sebagai model. Dalam versi lite ini keduanya dimasukkan ke pilihan pendekatan sesuai kebutuhan penyederhanaan. Asesmen dipilih berdasarkan maharah, bukan berdasarkan pendekatan atau metode.
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+const maharahData = {
+  istima:{
+    label:"Istimā‘",
+    icon:"🎧",
+    desc:"Fokus pada kemampuan memahami bunyi, kata, ungkapan, informasi, dan makna dari bahasa Arab lisan.",
+    unsur:"Aṣwāt sangat dominan; mufradāt muncul melalui input lisan; qawā‘id dikenalkan lewat pola ujaran yang sering didengar.",
+    approaches:["Kontekstual","Quantum","Kooperatif","PAIKEM","CALL","Saintifik","Deep Learning"]
+  },
+  kalam:{
+    label:"Kalām",
+    icon:"🗣️",
+    desc:"Fokus pada kemampuan menggunakan bahasa Arab secara lisan untuk bertanya, menjawab, berdialog, dan menyampaikan gagasan.",
+    unsur:"Aṣwāt mendukung pelafalan; mufradāt mendukung kelancaran komunikasi; qawā‘id dipakai untuk membangun ujaran yang tepat.",
+    approaches:["Kontekstual","Quantum","Kooperatif","PAIKEM","PBL","PjBL","CALL","Saintifik","Deep Learning"]
+  },
+  qiraah:{
+    label:"Qirā’ah",
+    icon:"📖",
+    desc:"Fokus pada kemampuan memahami teks Arab, menemukan informasi, memahami makna global dan rinci, serta menangkap pesan teks.",
+    unsur:"Mufradāt dan qawā‘id kuat sebagai alat bantu memahami teks; aṣwāt hanya dominan ketika ada membaca nyaring.",
+    approaches:["Kontekstual","Kooperatif","PAIKEM","PBL","PjBL","CALL","Saintifik","Deep Learning"]
+  },
+  kitabah:{
+    label:"Kitābah",
+    icon:"✍️",
+    desc:"Fokus pada kemampuan menulis kata, kalimat, paragraf, teks pendek, pesan, deskripsi, atau teks fungsional berbahasa Arab.",
+    unsur:"Mufradāt dan qawā‘id sangat penting untuk membangun kalimat dan teks; aṣwāt hadir terbatas, misalnya dalam imlā’.",
+    approaches:["Kontekstual","Kooperatif","PAIKEM","PBL","PjBL","CALL","Saintifik","Deep Learning"]
+  }
+};
+
+const approachData = {
+  "Kontekstual":{
+    desc:"Pembelajaran dikaitkan dengan kehidupan nyata, pengalaman siswa, lingkungan sekitar, budaya, dan kebutuhan komunikasi.",
+    methods:{
+      istima:["Audiolingual","Langsung","Komunikatif","Eklektik"],
+      kalam:["Langsung","Audiolingual","Komunikatif","Eklektik"],
+      qiraah:["Membaca","Gramatika-Terjemah","Komunikatif","Eklektik"],
+      kitabah:["Gramatika-Terjemah","Komunikatif","Eklektik"]
+    }
+  },
+  "Quantum":{
+    desc:"Pembelajaran dirancang aktif, menyenangkan, sugestif, dan memberdayakan siswa melalui suasana kelas yang positif.",
+    methods:{
+      istima:["Audiolingual","Langsung","Komunikatif","Eklektik"],
+      kalam:["Langsung","Audiolingual","Komunikatif","Eklektik"],
+      qiraah:["Membaca","Komunikatif","Eklektik"],
+      kitabah:["Komunikatif","Eklektik"]
+    }
+  },
+  "Kooperatif":{
+    desc:"Pembelajaran menekankan kerja sama, tanggung jawab individu, saling membantu, dan interaksi dalam kelompok kecil.",
+    methods:{
+      istima:["Audiolingual","Komunikatif","Eklektik"],
+      kalam:["Langsung","Komunikatif","Eklektik"],
+      qiraah:["Membaca","Gramatika-Terjemah","Komunikatif","Eklektik"],
+      kitabah:["Gramatika-Terjemah","Komunikatif","Eklektik"]
+    }
+  },
+  "PAIKEM":{
+    desc:"Pembelajaran aktif, inovatif, kreatif, efektif, dan menyenangkan; siswa dilibatkan secara fisik, mental, dan sosial.",
+    methods:{
+      istima:["Audiolingual","Langsung","Komunikatif","Eklektik"],
+      kalam:["Langsung","Audiolingual","Komunikatif","Eklektik"],
+      qiraah:["Membaca","Komunikatif","Eklektik"],
+      kitabah:["Komunikatif","Eklektik","Gramatika-Terjemah"]
+    }
+  },
+  "PBL":{
+    desc:"Pembelajaran dimulai dari masalah yang perlu dipahami, didiskusikan, dan dipecahkan siswa.",
+    methods:{
+      istima:["Komunikatif","Eklektik"],
+      kalam:["Komunikatif","Langsung","Eklektik"],
+      qiraah:["Membaca","Gramatika-Terjemah","Komunikatif","Eklektik"],
+      kitabah:["Gramatika-Terjemah","Komunikatif","Eklektik"]
+    }
+  },
+  "PjBL":{
+    desc:"Pembelajaran diarahkan pada pengerjaan proyek yang menghasilkan produk, seperti dialog video, poster Arab, brosur, atau teks sederhana.",
+    methods:{
+      istima:["Komunikatif","Audiolingual","Eklektik"],
+      kalam:["Langsung","Komunikatif","Eklektik"],
+      qiraah:["Membaca","Komunikatif","Eklektik"],
+      kitabah:["Gramatika-Terjemah","Komunikatif","Eklektik"]
+    }
+  },
+  "CALL":{
+    desc:"Pembelajaran bahasa berbantuan komputer atau teknologi digital, seperti audio, video, aplikasi, LMS, kuis digital, korpus, dan latihan daring.",
+    methods:{
+      istima:["Audiolingual","Langsung","Komunikatif","Eklektik"],
+      kalam:["Audiolingual","Langsung","Komunikatif","Eklektik"],
+      qiraah:["Membaca","Gramatika-Terjemah","Komunikatif","Eklektik"],
+      kitabah:["Gramatika-Terjemah","Komunikatif","Eklektik"]
+    }
+  },
+  "Saintifik":{
+    desc:"Pembelajaran mengikuti alur mengamati, menanya, mencoba/mengumpulkan informasi, menalar, dan mengomunikasikan.",
+    methods:{
+      istima:["Audiolingual","Komunikatif","Eklektik"],
+      kalam:["Langsung","Komunikatif","Eklektik"],
+      qiraah:["Membaca","Gramatika-Terjemah","Komunikatif","Eklektik"],
+      kitabah:["Gramatika-Terjemah","Komunikatif","Eklektik"]
+    }
+  },
+  "Deep Learning":{
+    desc:"Pembelajaran mendalam yang menekankan kebermaknaan, kesadaran belajar, refleksi, keterhubungan dengan kehidupan, dan suasana belajar yang menggembirakan.",
+    methods:{
+      istima:["Komunikatif","Eklektik"],
+      kalam:["Komunikatif","Langsung","Eklektik"],
+      qiraah:["Membaca","Gramatika-Terjemah","Komunikatif","Eklektik"],
+      kitabah:["Gramatika-Terjemah","Komunikatif","Eklektik"]
+    }
+  }
+};
+
+const methodData = {
+  "Gramatika-Terjemah":{
+    desc:"Menekankan pemahaman kaidah, analisis struktur, dan penerjemahan.",
+    fit:"Paling relevan untuk qirā’ah dan sebagian kitābah; dapat dipakai untuk memahami teks, menerjemahkan bagian penting, dan menyusun kalimat berdasarkan pola."
+  },
+  "Langsung":{
+    desc:"Menggunakan bahasa Arab secara langsung dengan meminimalkan bahasa perantara.",
+    fit:"Cocok untuk istimā‘ dan kalām, terutama tanya jawab sederhana, pengenalan ungkapan, dan pembiasaan respons lisan."
+  },
+  "Membaca":{
+    desc:"Berfokus pada kemampuan membaca dan memahami teks Arab.",
+    fit:"Paling relevan untuk qirā’ah melalui membaca cepat, membaca rinci, menemukan gagasan utama, dan memahami informasi teks."
+  },
+  "Audiolingual":{
+    desc:"Berbasis latihan dengar-ucap, peniruan, pengulangan, dan pembiasaan pola kalimat.",
+    fit:"Cocok untuk istimā‘ dan kalām, terutama latihan bunyi, intonasi, drill, dialog berpola, dan penguatan struktur lisan."
+  },
+  "Komunikatif":{
+    desc:"Menekankan penggunaan bahasa untuk komunikasi bermakna dalam konteks tertentu.",
+    fit:"Cocok untuk kalām, kitābah fungsional, qirā’ah berbasis tugas, dan istimā‘ yang diarahkan pada pemahaman makna komunikasi."
+  },
+  "Eklektik":{
+    desc:"Memadukan beberapa metode sesuai tujuan, maharah, materi, dan karakter siswa.",
+    fit:"Cocok untuk semua maharah ketika satu pertemuan memerlukan kombinasi membaca, dialog, terjemah terbimbing, drill, atau penulisan sederhana."
+  }
+};
+
+const assessmentData = {
+  istima:[
+    ["Mengidentifikasi bunyi", "Siswa membedakan bunyi Arab yang mirip, misalnya ح/ه, ع/أ, ق/ك, ص/س."],
+    ["Memilih kata/kalimat yang didengar", "Siswa memilih kata atau kalimat sesuai audio yang diperdengarkan."],
+    ["Memilih gambar sesuai audio", "Siswa memilih gambar yang paling sesuai dengan kata, kalimat, dialog, atau narasi lisan."],
+    ["Benar-salah berdasarkan audio", "Siswa menentukan kebenaran pernyataan berdasarkan informasi dari audio."],
+    ["Menjodohkan audio dengan gambar/kalimat", "Siswa memasangkan audio dengan gambar, kata, atau kalimat yang sesuai."],
+    ["Melengkapi teks rumpang berdasarkan audio", "Siswa mengisi kata/frasa yang hilang setelah menyimak audio."],
+    ["Menjawab pertanyaan dari dialog/narasi", "Siswa menjawab pertanyaan literal atau sederhana berdasarkan teks lisan."],
+    ["Merespons perintah lisan", "Siswa melakukan tindakan atau memberi respons berdasarkan instruksi lisan."],
+    ["Dikte/imlā’ sederhana", "Guru membacakan kata atau kalimat pendek, siswa menuliskannya."],
+    ["Observasi respons menyimak", "Guru mengamati ketepatan respons siswa saat menyimak instruksi atau informasi."],
+    ["Portofolio tugas menyimak", "Kumpulan tugas menyimak, catatan hasil audio, atau rekaman respons dari waktu ke waktu."]
+  ],
+  kalam:[
+    ["Menirukan ujaran", "Siswa menirukan bunyi, kata, ungkapan, atau kalimat untuk menilai pelafalan dan intonasi."],
+    ["Membaca nyaring", "Digunakan bila fokus kalām adalah pelafalan, makhraj, intonasi, dan kelancaran ujaran."],
+    ["Menjawab pertanyaan lisan", "Siswa menjawab pertanyaan guru atau teman secara langsung."],
+    ["Tanya jawab berpasangan", "Siswa saling bertanya dan menjawab sesuai tema."],
+    ["Dialog", "Siswa menampilkan percakapan berdasarkan tema atau situasi tertentu."],
+    ["Role play", "Siswa bermain peran dalam situasi komunikasi nyata atau semi-nyata."],
+    ["Mendeskripsikan gambar", "Siswa menjelaskan isi gambar secara lisan."],
+    ["Bercerita berdasarkan gambar berseri", "Siswa menyusun cerita lisan dari urutan gambar."],
+    ["Menceritakan pengalaman", "Siswa menyampaikan pengalaman pribadi secara sederhana dalam bahasa Arab."],
+    ["Presentasi pendek", "Siswa menyampaikan paparan singkat tentang tema tertentu."],
+    ["Wawancara", "Siswa melakukan wawancara terstruktur atau semi-terstruktur."],
+    ["Retelling", "Siswa menceritakan kembali isi teks, dialog, video, atau cerita."],
+    ["Debat sederhana", "Siswa menyampaikan pendapat dan tanggapan secara sederhana."],
+    ["Portofolio rekaman", "Kumpulan rekaman suara/video untuk melihat perkembangan kalām."],
+    ["Observasi performa", "Guru menilai performa berbicara melalui rubrik."],
+    ["Penilaian teman sejawat", "Siswa memberi umpan balik pada performa lisan teman secara terarah."]
+  ],
+  qiraah:[
+    ["Menjawab pertanyaan berdasarkan teks", "Siswa menjawab pertanyaan literal, inferensial, atau evaluatif dari bacaan."],
+    ["Pilihan ganda pemahaman bacaan", "Siswa memilih jawaban paling tepat berdasarkan isi teks."],
+    ["Benar-salah berdasarkan teks", "Siswa menentukan benar atau salahnya pernyataan sesuai bacaan."],
+    ["Menjodohkan kata Arab dengan maknanya", "Siswa memasangkan kosakata Arab dengan arti atau padanan maknanya."],
+    ["Menjodohkan kalimat dengan gambar", "Siswa memasangkan kalimat Arab dengan gambar yang sesuai."],
+    ["Menjodohkan paragraf dengan judul/subjudul", "Siswa mencocokkan paragraf dengan judul atau subjudul yang tepat."],
+    ["Melengkapi tabel informasi dari teks", "Siswa mengisi tabel berdasarkan data dari bacaan."],
+    ["Menentukan ide pokok", "Siswa menemukan gagasan utama teks atau paragraf."],
+    ["Menentukan informasi tersurat", "Siswa menemukan informasi yang disebutkan secara eksplisit."],
+    ["Menyimpulkan informasi tersirat", "Siswa menarik kesimpulan dari petunjuk yang ada di teks."],
+    ["Menentukan makna kata berdasarkan konteks", "Siswa menebak makna kata dari kalimat atau paragraf."],
+    ["Memberi harakat teks gundul", "Siswa memberi harakat untuk menunjukkan pemahaman struktur dan makna."],
+    ["Menerjemahkan Arab–Indonesia", "Siswa menerjemahkan teks Arab ke bahasa Indonesia."],
+    ["Merangkum isi teks dalam bahasa Indonesia", "Siswa menyarikan isi bacaan dengan bahasa sendiri."],
+    ["Membuat peta konsep isi bacaan", "Siswa memetakan gagasan utama, rincian, dan relasi informasi dalam teks."]
+  ],
+  kitabah:[
+    ["Menyalin huruf/kata/kalimat", "Siswa menyalin bentuk tulisan Arab secara tepat dan rapi."],
+    ["Imlā’", "Siswa menulis kata atau kalimat yang didiktekan."],
+    ["Menyusun huruf acak menjadi kata", "Siswa menyusun huruf terpisah menjadi kata Arab yang benar."],
+    ["Menyusun kata acak menjadi kalimat", "Siswa menyusun kata-kata menjadi kalimat Arab yang bermakna."],
+    ["Melengkapi kalimat rumpang", "Siswa mengisi bagian kosong dengan kata atau struktur yang sesuai."],
+    ["Membuat kalimat berdasarkan kata tertentu", "Siswa membuat kalimat Arab dengan kosakata yang ditentukan."],
+    ["Membuat kalimat berdasarkan contoh pola", "Siswa menulis kalimat baru mengikuti pola yang disediakan."],
+    ["Mengubah bentuk kalimat", "Siswa mengubah bentuk kalimat, misalnya positif-negatif, mufrad-jamak, atau bentuk waktu."],
+    ["Membuat pertanyaan dari pernyataan", "Siswa mengubah pernyataan menjadi kalimat tanya."],
+    ["Menjawab pertanyaan dengan kalimat lengkap", "Siswa menjawab pertanyaan tertulis menggunakan kalimat utuh."],
+    ["Menyusun kalimat acak menjadi paragraf", "Siswa mengurutkan kalimat agar menjadi paragraf yang padu."],
+    ["Menulis berdasarkan gambar", "Siswa menulis kalimat atau paragraf berdasarkan gambar."],
+    ["Menarasikan gambar berseri", "Siswa menulis narasi dari urutan gambar berseri."],
+    ["Menerjemahkan Indonesia–Arab", "Siswa menerjemahkan teks Indonesia ke bahasa Arab."],
+    ["Menulis dialog/surat/pengumuman/biodata", "Siswa menulis teks fungsional sesuai kebutuhan komunikasi."],
+    ["Menulis paragraf pendek", "Siswa menyusun paragraf sederhana dengan tema tertentu."],
+    ["Portofolio tulisan", "Kumpulan tulisan siswa untuk melihat perkembangan dari waktu ke waktu."],
+    ["Proyek produk tertulis", "Siswa menghasilkan produk tulis, seperti poster, brosur, caption, atau booklet sederhana."]
+  ]
+};
+
+const state = {maharah:null, approach:null, method:null, assessment:null};
+const el = {
+  maharahChips:document.getElementById('maharahChips'),
+  pendekatanSection:document.getElementById('section-pendekatan'),
+  pendekatanChips:document.getElementById('pendekatanChips'),
+  pendekatanSub:document.getElementById('pendekatanSub'),
+  metodeSection:document.getElementById('section-metode'),
+  metodeChips:document.getElementById('metodeChips'),
+  metodeSub:document.getElementById('metodeSub'),
+  asesmenSection:document.getElementById('section-asesmen'),
+  asesmenCards:document.getElementById('asesmenCards'),
+  asesmenSub:document.getElementById('asesmenSub'),
+  ringkasan:document.getElementById('section-ringkasan'),
+  resultCards:document.getElementById('resultCards'),
+  pathBox:document.getElementById('pathBox'),
+  descBox:document.getElementById('descBox')
+};
+function esc(s){return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;')}
+function escJs(s){return String(s).replaceAll('\\','\\\\').replaceAll("'","\\'")}
+function setSelected(container,key){[...container.querySelectorAll('.chip')].forEach(b=>b.classList.toggle('selected',b.dataset.key===key))}
+function renderMaharah(){
+  el.maharahChips.innerHTML = Object.entries(maharahData).map(([key,m]) =>
+    `<button class="chip" data-key="${key}" onclick="selectMaharah('${key}')"><span>${m.icon}</span> ${esc(m.label)}</button>`
+  ).join('');
+}
+function selectMaharah(key){
+  state.maharah = key; state.approach = null; state.method = null; state.assessment = null; state.assessment = null;
+  setSelected(el.maharahChips,key);
+  renderApproaches();
+  el.pendekatanSection.classList.remove('hidden');
+  el.pendekatanSection.classList.add('fade');
+  el.metodeSection.classList.add('hidden');
+  el.asesmenSection.classList.add('hidden');
+  el.ringkasan.classList.add('hidden');
+  const m = maharahData[key];
+  el.pendekatanSub.textContent = `Pendekatan yang cocok untuk ${m.label}.`;
+  el.descBox.textContent = `${m.label}: ${m.desc}`;
+  updatePath();
+  el.pendekatanSection.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function renderApproaches(){
+  const list = maharahData[state.maharah].approaches;
+  el.pendekatanChips.innerHTML = list.map(name =>
+    `<button class="chip" data-key="${esc(name)}" onclick="selectApproach('${escJs(name)}')">${esc(name)}</button>`
+  ).join('');
+}
+function selectApproach(name){
+  state.approach = name; state.method = null; state.assessment = null;
+  setSelected(el.pendekatanChips,name);
+  const a = approachData[name];
+  const methods = a.methods[state.maharah] || [];
+  el.metodeSub.textContent = `Metode yang cocok untuk ${maharahData[state.maharah].label} dengan pendekatan ${name}.`;
+  el.metodeChips.innerHTML = methods.map(m =>
+    `<button class="chip" data-key="${esc(m)}" onclick="selectMethod('${escJs(m)}')">${esc(m)}</button>`
+  ).join('');
+  el.metodeSection.classList.remove('hidden');
+  el.metodeSection.classList.add('fade');
+  el.asesmenSection.classList.add('hidden');
+  el.ringkasan.classList.add('hidden');
+  el.descBox.textContent = `${name}: ${a.desc}`;
+  updatePath();
+  el.metodeSection.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function selectMethod(name){
+  state.method = name;
+  state.assessment = null;
+  setSelected(el.metodeChips,name);
+  renderAssessments();
+  updatePath();
+  el.asesmenSection.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function renderAssessments(){
+  const m = maharahData[state.maharah];
+  const list = assessmentData[state.maharah] || [];
+  el.asesmenSub.textContent = `Asesmen yang cocok untuk ${m.label}. Pilih salah satu bentuk evaluasi untuk ringkasan RPP lite.`;
+  el.asesmenCards.innerHTML = list.map(([title,desc]) => `
+    <article class="assess-card" data-key="${esc(title)}" onclick="selectAssessment('${escJs(title)}')">
+      <h3>${esc(title)}</h3>
+      <p>${esc(desc)}</p>
+    </article>
+  `).join('');
+  el.asesmenSection.classList.remove('hidden');
+  el.asesmenSection.classList.add('fade');
+  el.ringkasan.classList.add('hidden');
+  el.descBox.textContent = `${m.label} → ${state.approach} → ${state.method}. Pilih asesmen yang sesuai dengan indikator pembelajaran.`;
+}
+function setSelectedAssessment(title){
+  [...el.asesmenCards.querySelectorAll('.assess-card')].forEach(card=>card.classList.toggle('selected',card.dataset.key===title));
+}
+function selectAssessment(title){
+  state.assessment = title;
+  setSelectedAssessment(title);
+  renderResult();
+  updatePath();
+  el.ringkasan.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function renderResult(){
+  const m = maharahData[state.maharah];
+  const a = approachData[state.approach];
+  const method = methodData[state.method];
+  const assessment = (assessmentData[state.maharah] || []).find(([title]) => title === state.assessment) || [state.assessment, ""];
+  el.resultCards.innerHTML = `
+    <article class="card"><h3>${esc(m.icon)} ${esc(m.label)}</h3><p>${esc(m.desc)}</p><div class="badge-row"><span class="badge green">Maharah</span></div></article>
+    <article class="card"><h3>${esc(state.approach)}</h3><p>${esc(a.desc)}</p><div class="badge-row"><span class="badge gold">Pendekatan</span></div></article>
+    <article class="card"><h3>${esc(state.method)}</h3><p>${esc(method.desc)}</p><div class="badge-row"><span class="badge rose">Metode</span></div></article>
+    <article class="card"><h3>${esc(assessment[0])}</h3><p>${esc(assessment[1])}</p><div class="badge-row"><span class="badge green">Asesmen</span></div></article>
+    <article class="card"><h3>Catatan Integrasi Unsur Bahasa</h3><p>${esc(m.unsur)}</p><div class="badge-row"><span class="badge">Aṣwāt</span><span class="badge">Mufradāt</span><span class="badge">Qawā‘id</span></div></article>
+    <article class="card"><h3>Rumusan Jalur</h3><p>${esc(m.label)} → ${esc(state.approach)} → ${esc(state.method)} → ${esc(state.assessment)}</p><div class="badge-row"><span class="badge green">Siap dipakai</span></div></article>
+  `;
+  el.ringkasan.classList.remove('hidden');
+  el.ringkasan.classList.add('fade');
+  el.descBox.textContent = `${m.label} → ${state.approach} → ${state.method} → ${state.assessment}. ${method.fit}`;
+}
+function updatePath(){
+  const rows = [];
+  if(state.maharah) rows.push(['Maharah', maharahData[state.maharah].label]);
+  if(state.approach) rows.push(['Pendekatan', state.approach]);
+  if(state.method) rows.push(['Metode', state.method]);
+  if(state.assessment) rows.push(['Asesmen', state.assessment]);
+  el.pathBox.innerHTML = rows.length ? rows.map(([k,v]) => `<div class="path-item"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join('') : '<p class="hint">Belum ada pilihan.</p>';
+}
+function resetMetode(){
+  state.method = null; state.assessment = null;
+  setSelected(el.metodeChips,null);
+  el.asesmenSection.classList.add('hidden');
+  el.ringkasan.classList.add('hidden');
+  el.descBox.textContent = state.approach ? `${state.approach}: ${approachData[state.approach].desc}` : 'Pilih pendekatan untuk melihat metode yang cocok.';
+  updatePath();
+}
+function resetPendekatan(){
+  state.approach = null; state.method = null; state.assessment = null;
+  setSelected(el.pendekatanChips,null);
+  el.metodeSection.classList.add('hidden');
+  el.asesmenSection.classList.add('hidden');
+  el.ringkasan.classList.add('hidden');
+  el.metodeChips.innerHTML = '';
+  el.asesmenCards.innerHTML = '';
+  el.descBox.textContent = state.maharah ? `${maharahData[state.maharah].label}: ${maharahData[state.maharah].desc}` : 'Pilih maharah untuk memulai pemetaan.';
+  updatePath();
+}
+function resetAsesmen(){
+  state.assessment = null;
+  setSelectedAssessment(null);
+  el.ringkasan.classList.add('hidden');
+  el.descBox.textContent = state.method ? `${maharahData[state.maharah].label} → ${state.approach} → ${state.method}. Pilih asesmen yang sesuai dengan indikator pembelajaran.` : 'Pilih metode terlebih dahulu.';
+  updatePath();
+}
+function resetAll(){
+  state.maharah = null; state.approach = null; state.method = null; state.assessment = null; state.assessment = null;
+  setSelected(el.maharahChips,null);
+  el.pendekatanSection.classList.add('hidden');
+  el.metodeSection.classList.add('hidden');
+  el.asesmenSection.classList.add('hidden');
+  el.ringkasan.classList.add('hidden');
+  el.pendekatanChips.innerHTML = '';
+  el.metodeChips.innerHTML = '';
+  el.asesmenCards.innerHTML = '';
+  el.descBox.textContent = 'Pilih maharah untuk memulai pemetaan.';
+  updatePath();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+renderMaharah();
+updatePath();
+</script>
+</body>
+</html>
