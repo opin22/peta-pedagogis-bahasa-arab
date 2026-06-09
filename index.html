@@ -302,6 +302,29 @@
     .has-tip::before{display:none!important}
   }
 
+
+  /* Tooltip untuk layar sentuh: muncul saat pilihan disentuh. */
+  .has-tip.tip-open::after,
+  .has-tip.tip-open::before{
+    opacity:1;
+    visibility:visible;
+    display:block!important;
+  }
+  .has-tip.tip-open::after{
+    transform:translateX(-50%) translateY(0);
+  }
+  @media (max-width:760px){
+    .has-tip.tip-open::after{
+      transform:translateX(-50%) translateY(0);
+    }
+  }
+  @media (hover:none){
+    .has-tip.tip-open::after,
+    .has-tip.tip-open::before{
+      display:block!important;
+    }
+  }
+
   @media print{
     body{background:#fff}
     .hero-actions,.reset{display:none!important}
@@ -799,6 +822,33 @@ function resetAll(){
 }
 renderMaharah();
 updatePath();
+
+
+// Tooltip di perangkat sentuh: karena tidak ada hover, hint muncul saat tombol/kartu disentuh.
+let touchTipTimer = null;
+function closeTouchTips(){
+  document.querySelectorAll('.has-tip.tip-open').forEach(node => node.classList.remove('tip-open'));
+}
+function openTouchTip(node){
+  closeTouchTips();
+  node.classList.add('tip-open');
+  clearTimeout(touchTipTimer);
+  touchTipTimer = setTimeout(() => {
+    node.classList.remove('tip-open');
+  }, 3200);
+}
+document.addEventListener('pointerdown', function(event){
+  const tipNode = event.target.closest('.has-tip');
+  const isTouchLike = event.pointerType === 'touch' || event.pointerType === 'pen' || window.matchMedia('(hover: none)').matches;
+  if(!isTouchLike) return;
+  if(tipNode){
+    openTouchTip(tipNode);
+  }else{
+    closeTouchTips();
+  }
+});
+document.addEventListener('scroll', closeTouchTips, {passive:true});
+
 </script>
 </body>
 </html>
