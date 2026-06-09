@@ -94,7 +94,7 @@
   .btn:hover{transform:translateY(-1px);border-color:var(--accent)}
   .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
   .grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
-  .panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow2);overflow:hidden}
+  .panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow2);overflow:visible}
   .main{padding:16px}.side{padding:16px;position:sticky;top:14px}
   .section{border:1px solid #e7ddcf;border-radius:16px;background:#fffefb;padding:16px;margin-bottom:12px}
   .section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
@@ -148,6 +148,72 @@
   .assess-card.selected{border-color:var(--accent);box-shadow:0 0 0 2px rgba(107,79,59,.12);background:#fff9ef}
   .assess-card h3{margin:0 0 6px;font-size:14px;letter-spacing:-.01em}
   .assess-card p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.65}
+
+  .has-tip{position:relative}
+  .has-tip::after{
+    content:attr(data-tip);
+    position:absolute;
+    left:50%;
+    bottom:calc(100% + 10px);
+    transform:translateX(-50%) translateY(4px);
+    min-width:220px;
+    max-width:320px;
+    width:max-content;
+    padding:10px 12px;
+    border-radius:12px;
+    background:#1f2933;
+    color:#fffdf8;
+    font-size:12px;
+    line-height:1.55;
+    font-weight:650;
+    box-shadow:0 14px 30px rgba(0,0,0,.18);
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:opacity .16s ease, transform .16s ease, visibility .16s ease;
+    z-index:999;
+    white-space:normal;
+    text-align:left;
+  }
+  .has-tip::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:calc(100% + 4px);
+    transform:translateX(-50%);
+    border-width:6px;
+    border-style:solid;
+    border-color:#1f2933 transparent transparent transparent;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .16s ease, visibility .16s ease;
+    z-index:1000;
+  }
+  .has-tip:hover::after,
+  .has-tip:hover::before,
+  .has-tip:focus-visible::after,
+  .has-tip:focus-visible::before{
+    opacity:1;
+    visibility:visible;
+  }
+  .has-tip:hover::after,
+  .has-tip:focus-visible::after{
+    transform:translateX(-50%) translateY(0);
+  }
+  .assess-card.has-tip::after{bottom:calc(100% + 12px)}
+  @media(max-width:620px){
+    .has-tip::after{
+      left:0;
+      transform:translateY(4px);
+      min-width:210px;
+      max-width:calc(100vw - 42px);
+      width:max-content;
+    }
+    .has-tip:hover::after,
+    .has-tip:focus-visible::after{transform:translateY(0)}
+    .has-tip::before{left:20px;transform:none}
+  }
+
   @media(max-width:720px){.assessment-grid{grid-template-columns:1fr}}
   @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
   @media(max-width:940px){.grid{grid-template-columns:1fr}.side{position:static}.cards{grid-template-columns:1fr}}
@@ -162,7 +228,7 @@
       <h1>Peta Pembelajaran Bahasa Arab Berbasis Maharah</h1>
       <p>
         Pilih maharah terlebih dahulu, lalu pilih pendekatan dan metode yang sesuai.
-        Versi ini memuat empat komponen: maharah, pendekatan, metode, dan asesmen.
+        Versi ini memuat empat komponen: maharah, pendekatan, metode, dan asesmen. Arahkan kursor ke setiap pilihan untuk melihat keterangan singkatnya.
       </p>
       <div class="hero-actions">
         <button class="btn primary" onclick="document.getElementById('section-maharah').scrollIntoView({behavior:'smooth'})">Mulai memilih</button>
@@ -178,7 +244,7 @@
           <div class="title"><span class="num">1</span> Pilih Maharah</div>
           <button class="reset" onclick="resetAll()">Reset</button>
         </div>
-        <div class="sub">Maharah menjadi titik awal. Aṣwāt, mufradāt, dan qawā‘id masuk sebagai unsur pendukung di dalam maharah, bukan sebagai jalur terpisah.</div>
+        <div class="sub">Maharah menjadi titik awal. Arahkan kursor ke pilihan untuk melihat keterangan singkat. Aṣwāt, mufradāt, dan qawā‘id masuk sebagai unsur pendukung di dalam maharah, bukan sebagai jalur terpisah.</div>
         <div class="chips" id="maharahChips"></div>
       </section>
 
@@ -486,7 +552,7 @@ function escJs(s){return String(s).replaceAll('\\','\\\\').replaceAll("'","\\'")
 function setSelected(container,key){[...container.querySelectorAll('.chip')].forEach(b=>b.classList.toggle('selected',b.dataset.key===key))}
 function renderMaharah(){
   el.maharahChips.innerHTML = Object.entries(maharahData).map(([key,m]) =>
-    `<button class="chip" data-key="${key}" onclick="selectMaharah('${key}')"><span>${m.icon}</span> ${esc(m.label)}</button>`
+    `<button class="chip has-tip" data-key="${key}" data-tip="${esc(m.desc)}" title="${esc(m.desc)}" onclick="selectMaharah('${key}')"><span>${m.icon}</span> ${esc(m.label)}</button>`
   ).join('');
 }
 function selectMaharah(key){
@@ -507,7 +573,7 @@ function selectMaharah(key){
 function renderApproaches(){
   const list = maharahData[state.maharah].approaches;
   el.pendekatanChips.innerHTML = list.map(name =>
-    `<button class="chip" data-key="${esc(name)}" onclick="selectApproach('${escJs(name)}')">${esc(name)}</button>`
+    `<button class="chip has-tip" data-key="${esc(name)}" data-tip="${esc(approachData[name].desc)}" title="${esc(approachData[name].desc)}" onclick="selectApproach('${escJs(name)}')">${esc(name)}</button>`
   ).join('');
 }
 function selectApproach(name){
@@ -517,7 +583,7 @@ function selectApproach(name){
   const methods = a.methods[state.maharah] || [];
   el.metodeSub.textContent = `Metode yang cocok untuk ${maharahData[state.maharah].label} dengan pendekatan ${name}.`;
   el.metodeChips.innerHTML = methods.map(m =>
-    `<button class="chip" data-key="${esc(m)}" onclick="selectMethod('${escJs(m)}')">${esc(m)}</button>`
+    `<button class="chip has-tip" data-key="${esc(m)}" data-tip="${esc(methodData[m].desc + ' ' + methodData[m].fit)}" title="${esc(methodData[m].desc + ' ' + methodData[m].fit)}" onclick="selectMethod('${escJs(m)}')">${esc(m)}</button>`
   ).join('');
   el.metodeSection.classList.remove('hidden');
   el.metodeSection.classList.add('fade');
@@ -540,7 +606,7 @@ function renderAssessments(){
   const list = assessmentData[state.maharah] || [];
   el.asesmenSub.textContent = `Asesmen yang cocok untuk ${m.label}. Pilih satu atau beberapa bentuk evaluasi untuk ringkasan RPP lite.`;
   el.asesmenCards.innerHTML = list.map(([title,desc]) => `
-    <article class="assess-card" data-key="${esc(title)}" onclick="selectAssessment('${escJs(title)}')">
+    <article class="assess-card has-tip" data-key="${esc(title)}" data-tip="${esc(desc)}" title="${esc(desc)}" onclick="selectAssessment('${escJs(title)}')">
       <h3>${esc(title)}</h3>
       <p>${esc(desc)}</p>
     </article>
